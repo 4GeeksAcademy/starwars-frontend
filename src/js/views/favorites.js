@@ -3,7 +3,6 @@ import { Card } from "../component/card.js";
 import { Context } from "../store/appContext.js";
 import "../../styles/home.css";
 
-
 export const Favorites = () => {
     const {actions, store} = useContext(Context);
 

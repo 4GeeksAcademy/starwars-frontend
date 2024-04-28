@@ -30,7 +30,7 @@ export const Navbar = () => {
 							<Link to="/users/favorites">
 								<div>
 									<button className="btn-lg">
-										MY FAVORITES
+										Go To My Favorites
 									</button>
 								</div> 
 							</Link>

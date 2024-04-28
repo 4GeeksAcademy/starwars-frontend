@@ -118,9 +118,6 @@ const getState = ({ getStore, getActions, setStore }) => {
                 	});
 					if (response.status === 200) {
 						const data = await response.json();
-						// obtener characters del store y guardarlos en una variable
-						// filtrar los characters guardados usando los ids del back
-						// guardar en el store como favoritos los filtrados
 						const allCharacters = getStore().characters;
 						const allPlanets = getStore().planets;
 						const allVehicles = getStore().vehicles;
