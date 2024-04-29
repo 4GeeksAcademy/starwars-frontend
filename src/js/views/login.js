@@ -8,13 +8,13 @@ export const Login = () => {
     const [loginError,setLoginError] = useState(false);
     const {actions} = useContext(Context);
     const navigate = useNavigate();
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const isLogged = await actions.login(email, password);
         if (isLogged){
             console.log('Login successful');
-            navigate('/users/favorites');
+            navigate('/');
         } else {
             setLoginError(true);
             console.log('Login failed');
