@@ -83,7 +83,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 			favorites: async () => {
 				const token = localStorage.getItem("token")
                 try {
-					const response = await fetch("https://congenial-potato-jj57pjrx494qc5vpv-3000.app.github.dev//users/favorites", {
+					const response = await fetch("https://congenial-potato-jj57pjrx494qc5vpv-3000.app.github.dev/users/favorites", {
 						method: 'GET',
 						headers:{
 							'Content-Type':'application/json',
