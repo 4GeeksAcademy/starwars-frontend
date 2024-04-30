@@ -1,14 +1,22 @@
 import React, {useContext, useEffect} from "react";
 import { Context } from "../store/appContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../../styles/navbar.css";
 
 export const Navbar = () => {
 	const {store, actions}= useContext(Context);
+	const navigate = useNavigate();
+	const token = localStorage.getItem("token")
 	
 	useEffect (() => {
 		actions.favorites();
 	}, []);
+
+	const handleLogOut= async (e) => {
+		localStorage.removeItem('token');
+		console.log("Logout exitoso");
+		navigate('/login')
+	};
 
 	let cantidad = 0;
 	for (let i = 0; i < store.favorites.length; i++) {
@@ -33,21 +41,7 @@ export const Navbar = () => {
 				<Link to="/">
 					<img className="navbar-brand text-black ms-5 logostarwars" src="https://logos-marcas.com/wp-content/uploads/2020/11/Star-Wars-Logo.png" />
 				</Link>
-				{store.isLogged
-					? null
-					: (
-						<Link to="/login">
-							<div>
-								<button className="btn-lg">
-									Log In
-								</button>
-							</div> 
-						</Link>
-					)
-				}
-				{!store.isLogged
-					? null
-					: (
+				{token ?
 						<>
 							<li className="nav dropdown me-5">
 								<a className=" d-flex nav-link dropdown-toggle text-white bg-primary rounded align-items-center" href="#" role="button" data-bs-toggle="dropdown">
@@ -70,9 +64,20 @@ export const Navbar = () => {
 									}
 								</ul>
 							</li>
+							<div>
+								<button className="btn-lg" onClick={handleLogOut}>Log Out</button>
+							</div>
 						</>
-					)
+					: 	<Link to="/login">
+							<div>
+								<button className="btn-lg">
+									Log In
+								</button>
+							</div> 
+						</Link>
 				}
+					
+					
 			</div>
 		</nav>
 	);

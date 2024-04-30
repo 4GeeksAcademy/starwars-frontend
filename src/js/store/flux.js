@@ -7,7 +7,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 				vehicles: [],
 				details: {},
 				favorites: [],
-				isLogged: false,
 		},
 		actions: {
 			getCharacters: () => {
@@ -78,6 +77,28 @@ const getState = ({ getStore, getActions, setStore }) => {
 						isLogged: false
 					});
 					return false;
+                }
+            },
+			favorites: async () => {
+                let token = localStorage.getItem("token")
+                try{
+                    let response = await fetch("https://congenial-potato-jj57pjrx494qc5vpv-3000.app.github.dev/users/favorites", {
+                        method: 'GET',
+                        headers:{
+                            'Content-Type':'application/json',
+                            "Authorization": "Bearer "+token
+                        },
+                    })
+                    let data = await response.json()
+                    if (response.status === 200) {
+                        console.log(data);
+                        setStore({favorites:data.results})
+                    }else{
+                        console.log(data);
+                        return [];
+                    }
+                } catch (error) {
+                    return [];
                 }
             },
 			favorites: async () => {

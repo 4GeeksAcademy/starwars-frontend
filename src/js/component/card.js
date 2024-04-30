@@ -5,6 +5,7 @@ import "../../styles/card.css";
 
 export const Card = (props) => {
     const {store, actions}= useContext(Context);
+    const token = localStorage.getItem("token")
 
     let isFavorite = false;
     if (store.favorites.length !== 0) {
@@ -59,13 +60,12 @@ export const Card = (props) => {
                     <Link to={`/details/${props.category}/${props.item.uid}`}>
                         <button className="btn text-primary border-primary">Learn More!</button>
                     </Link>
-                    {!store.isLogged
-					? null
-					: (
+                    {token ?
                         <button className={`corazon btn btn-outline-warning`} onClick={addOrRemove}>
                             <i className={`fa-heart ${isFavorite ? "fas text-warning" : "far"}`}></i>
                         </button>
-                    )}
+                    : null
+                    }
                 </div>
             </div>
         </div>	
