@@ -6,7 +6,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				planets: [],
 				vehicles: [],
 				details: {},
-				favorites: [],
+				favorites: [ [], [], [] ],
 		},
 		actions: {
 			getCharacters: () => {
@@ -59,26 +59,18 @@ const getState = ({ getStore, getActions, setStore }) => {
 					if (response.status === 200) {
 						const data = await response.json();
 						localStorage.setItem("token", data.access_token);
-						setStore({
-							...getStore(),
-							isLogged: true
-						});
 						return true;
 					} else {
-						setStore({
-							...getStore(),
-							isLogged: false
-						});
 						return false;
 					}
                 } catch (error) {
-					setStore({
-						...getStore(),
-						isLogged: false
-					});
 					return false;
                 }
             },
+			logOut: () => {
+				localStorage.removeItem('token');
+				setStore({favorites: [[], [], []]});
+			},
 			favorites: async () => {
 				const token = localStorage.getItem("token")
                 try {
@@ -91,34 +83,31 @@ const getState = ({ getStore, getActions, setStore }) => {
                 	});
 					if (response.status === 200) {
 						const data = await response.json();
-						const allCharacters = getStore().characters;
-						const allPlanets = getStore().planets;
-						const allVehicles = getStore().vehicles;
-						const backendCharacters = data.results[0];
-						const backendPlanets = data.results[1];
-						const backendVehicles = data.results[2];
-						const filteredCharacters = allCharacters.filter((character) => {
+						const { characters, planets, vehicles } = getStore(); 
+						const [ backendCharacters, backendPlanets, backendVehicles ] = data.results;
+						const filteredCharacters = characters.filter((character) => {
 							return backendCharacters.some((beCharacter) => character.name == beCharacter.character_id);
 						});
-						const filteredPlanets = allPlanets.filter((planet) => {
+						const filteredPlanets = planets.filter((planet) => {
 							return backendPlanets.some((bePlanet) => planet.name == bePlanet.planet_id);
 						});
-						const filteredVehicles = allVehicles.filter((vehicle) => {
+						const filteredVehicles = vehicles.filter((vehicle) => {
 							return backendVehicles.some((beVehicle) => vehicle.name == beVehicle.vehicle_id);
 						});
 						setStore({
-							...getStore(),
 							favorites: [
 								filteredCharacters,
 								filteredPlanets,
 								filteredVehicles
-							]
+							] 
 						});
 					} else {
-						return [];
+						console.log("hello");
+						return [[], [], []];
 					}
                 } catch (error) {
-                    return []; 
+					console.log("hello");
+                    return [[], [], []]; 
                 } 
             },
 			addFav: async (category, uid) => {
@@ -138,7 +127,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							const newFav = allCharacters.filter((character) => character.uid === uid);
 							const newListFav = listFav.concat(newFav) ;
 							setStore({
-								...getStore(),
 								favorites: [
 									newListFav,
 									getStore().favorites[1],
@@ -151,7 +139,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							const newFav = allPlanets.filter((planet) => planet.uid === uid);
 							const newListFav = listFav.concat(newFav) ;
 							setStore({
-								...getStore(),
 								favorites: [
 									getStore().favorites[0],
 									newListFav,
@@ -164,7 +151,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							const newFav = allVehicles.filter((vehicle) => vehicle.uid === uid);
 							const newListFav = listFav.concat(newFav) ;
 							setStore({
-								...getStore(),
 								favorites: [
 									getStore().favorites[0],
 									getStore().favorites[1],
@@ -189,13 +175,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 							'Authorization': "Bearer " + token
 						},
                 	});
-
 					if (response.status === 200) {
 						if (category === "people") {
 							let listFav = getStore().favorites[0];
 							const newListFav = listFav.filter((character) => character.uid !== uid);
 							setStore({
-								...getStore(),
 								favorites: [
 									newListFav,
 									getStore().favorites[1],
@@ -206,7 +190,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							let listFav = getStore().favorites[1];
 							const newListFav = listFav.filter((planet) => planet.uid !== uid);
 							setStore({
-								...getStore(),
 								favorites: [
 									getStore().favorites[0],
 									newListFav,
@@ -217,7 +200,6 @@ const getState = ({ getStore, getActions, setStore }) => {
 							let listFav = getStore().favorites[2];
 							const newListFav = listFav.filter((vehicle) => vehicle.uid !== uid);
 							setStore({
-								...getStore(),
 								favorites: [
 									getStore().favorites[0],
 									getStore().favorites[1],

@@ -5,11 +5,18 @@ import "../../styles/home.css";
 
 export const Home = () => {
 	const {store, actions} = useContext(Context);
-	useEffect (() => {
-		actions.getCharacters()
-		actions.getPlanets()
-		actions.getVehicles()
+	
+	useEffect(() => {
+		actions.getCharacters();
+		actions.getPlanets();
+		actions.getVehicles();
 	}, []);
+
+	useEffect(() => {
+		if (store.characters.length && store.planets.length && store.vehicles.length) {
+			actions.favorites();
+		} 
+	},[store.characters, store.planets, store.vehicles])
 
 	return (
 		<>

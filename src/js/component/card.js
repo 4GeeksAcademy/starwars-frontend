@@ -5,7 +5,7 @@ import "../../styles/card.css";
 
 export const Card = (props) => {
     const {store, actions}= useContext(Context);
-    const token = localStorage.getItem("token")
+    const token = localStorage.getItem("token");
 
     let isFavorite = false;
     if (store.favorites.length !== 0) {
